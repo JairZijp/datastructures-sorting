@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import nl.hva.ict.ds.InsertionSortHighScores;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,9 +24,9 @@ public class HighScoreListTest {
     @Before
     public void setup() {
         // Here you should select your implementation to be tested.
-        highScores = new DummyHighScores();
-//        highScores = new InsertionSortHighScores();
-//        highScores = new BucketSortHighScores();
+//        highScores = new DummyHighScores();
+        highScores = new BucketSortHighScores();
+//        highScores = new SelectionSortHighScores();
 //        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
@@ -71,6 +72,9 @@ public class HighScoreListTest {
     public void harryBeatsDumbledore() {
         highScores.add(dumbledore);
         Player harry = new Player("Harry", "Potter", dumbledore.getHighScore() + 1);
+
+        // harry has to be added to the highscoreslist
+        highScores.add(harry);
 
         assertEquals(harry, highScores.getHighScores(1).get(0));
     }
