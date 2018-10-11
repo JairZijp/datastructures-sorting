@@ -72,9 +72,9 @@ public class HighScoreListTest {
     public void harryBeatsDumbledore() {
         highScores.add(dumbledore);
         Player harry = new Player("Harry", "Potter", dumbledore.getHighScore() + 1);
-
-        // harry has to be added to the highscoreslist
         highScores.add(harry);
+        
+        //System.out.print(dumbledore.getHighScore() + " || " + harry.getHighScore());
 
         assertEquals(harry, highScores.getHighScores(1).get(0));
     }
