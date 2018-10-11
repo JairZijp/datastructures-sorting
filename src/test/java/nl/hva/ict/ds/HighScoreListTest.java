@@ -25,8 +25,8 @@ public class HighScoreListTest {
     public void setup() {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
-        highScores = new BucketSortHighScores();
-//        highScores = new SelectionSortHighScores();
+ //       highScores = new BucketSortHighScores();
+        highScores = new InsertionSortHighScores();
 //        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
