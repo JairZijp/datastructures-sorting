@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 import nl.hva.ict.ds.InsertionSortHighScores;
 
@@ -25,8 +26,8 @@ public class HighScoreListTest {
     public void setup() {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
-        highScores = new BucketSortHighScores();
-        //highScores = new SelectionSortHighScores();
+//        highScores = new BucketSortHighScores();
+        highScores = new SelectionSortHighScores();
 //        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
@@ -86,18 +87,36 @@ public class HighScoreListTest {
     }
     
     @Test
-    public void manyDifferentHighScores() {
+    public void manyDifferentHighScores() {        
         
-        
-        for(int i=0; i < 10000; i++) {
+        for(int i=0; i < 1; i++) {
             
             Player person = new Player("Person", "- " + i, getHighScore());
             highScores.add(person);                
             //System.out.print(person.getHighScore());
          
         }
-
+   }
+    
+    @Test
+    public void highScoresAreSorted(){
+        int totalPlayers = 10;
+        
+        for(int i = 0; i < totalPlayers; i++){
+            Player person = new Player("Person", "-" + i, getHighScore());
+            highScores.add(person);
+        }
+        
+        boolean lessThanPrevious = false;
+        List<Player> sortedScoreBoard = highScores.getHighScores(10);
+        for (int a = 1; a < totalPlayers; a++){
+            long thiselementhighscore = sortedScoreBoard.get(a).getHighScore();
+            long lastelementhighscore = sortedScoreBoard.get(a - 1).getHighScore();
+            lessThanPrevious = ( thiselementhighscore < lastelementhighscore ) ;
+            
+            if(!lessThanPrevious) break;
+        }
+        
+        assertTrue("The scores are not sorted correctly!", lessThanPrevious);
     }
-    
-    
 }
