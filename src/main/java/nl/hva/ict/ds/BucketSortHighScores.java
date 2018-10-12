@@ -38,6 +38,7 @@ public class BucketSortHighScores implements HighScoreList {
         }
 
         public void sortBucket() {
+            
             Player key;
             for (int i = 1; i < this.size(); i++) {     
 
@@ -53,8 +54,8 @@ public class BucketSortHighScores implements HighScoreList {
                 //System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
                 
                 players[index + 1] = key;
-            }
             
+            }      
             
         }
 
@@ -67,7 +68,9 @@ public class BucketSortHighScores implements HighScoreList {
     @Override
     public void add(Player player) {
         
-        if (count >= players.length) increaseArraySize();
+        if (count >= players.length) {
+            increaseArraySize();
+        }
 
         players[count] = player;
 
@@ -85,8 +88,7 @@ public class BucketSortHighScores implements HighScoreList {
         for (int i = 0; i < count; i++) {
             Player currentPlayer = players[i];
 
-            int index = (int) currentPlayer.getHighScore() / 10000;
-            
+            int index = (int) currentPlayer.getHighScore() / 10000; 
 
             if(buckets[index] == null) {
                 buckets[index] = new Bucket();
@@ -106,14 +108,19 @@ public class BucketSortHighScores implements HighScoreList {
         //System.out.println(Arrays.toString(buckets));
         
         int index = 0;
-        for(int i = 0; i < buckets.length; i++){
+        for(int i = 0; i < buckets.length; i++) {
+            
             if(buckets[i] != null){
                 Bucket currentBucket = buckets[i];
+                
                 for(int j = 0; j < buckets[i].size(); j++){
                     players[index++] = currentBucket.players[j];
                 }
+                
             }
+            
         }
+        
     }
     
     private int size() {
@@ -123,27 +130,22 @@ public class BucketSortHighScores implements HighScoreList {
     private void increaseArraySize() {
         players = Arrays.copyOf(players, players.length + 1);
     }
-
+    
     @Override
     public List<Player> getHighScores(int numberOfHighScores) {
-        List<Player> results = new ArrayList<>();
+        
+        List<Player> result = new ArrayList<>();
 
-        for (int i = 0; i < numberOfHighScores; i++) {
-            
-            if (i > players.length) {
-                return results;
-            }
-           
-            if (players[i] == null) {
-                return results;
-            }
+        for (int i = 0; i < numberOfHighScores && i < size(); i++) {
+            if (players[i] == null) return result;
 
-            results.add(players[i]);
+            result.add(players[i]);
         }
-        return results;
+        return result;
     }
 
-     @Override
+
+    @Override
     public List<Player> findPlayer(String firstName, String lastName) {
         List<Player> matchedPlayers = new ArrayList<>();
         for (Player player : players) {
