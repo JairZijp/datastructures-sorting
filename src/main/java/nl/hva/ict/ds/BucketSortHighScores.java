@@ -22,13 +22,12 @@ public class BucketSortHighScores implements HighScoreList {
         Player[] players = new Player[100];
         int count;
 
-        public void insert(Player obj) {
+        public void addPlayer(Player player) {
 
             if (count >= players.length) {
                 increaseArraySize();
             }
-
-            players[count] = obj;
+            players[count] = player;
 
             count++;
 
@@ -39,6 +38,7 @@ public class BucketSortHighScores implements HighScoreList {
         }
 
         public void sortBucket() {
+            
             Player key;
             for (int i = 1; i < this.size(); i++) {     
 
@@ -50,9 +50,12 @@ public class BucketSortHighScores implements HighScoreList {
                     players[index+1] = players[index];
                     index--;
                 }
-
+   
+                //System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
+                
                 players[index + 1] = key;
-            }
+            
+            }      
             
         }
 
@@ -65,7 +68,9 @@ public class BucketSortHighScores implements HighScoreList {
     @Override
     public void add(Player player) {
         
-        if (count >= players.length) increaseArraySize();
+        if (count >= players.length) {
+            increaseArraySize();
+        }
 
         players[count] = player;
 
@@ -83,11 +88,13 @@ public class BucketSortHighScores implements HighScoreList {
         for (int i = 0; i < count; i++) {
             Player currentPlayer = players[i];
 
-            int index = (int) currentPlayer.getHighScore() / 10000;
+            int index = (int) currentPlayer.getHighScore() / 10000; 
 
-            if(buckets[index] == null) buckets[index] = new Bucket();
+            if(buckets[index] == null) {
+                buckets[index] = new Bucket();
+            }
 
-            buckets[index].insert(currentPlayer);
+            buckets[index].addPlayer(currentPlayer);
         }
 
         for(int i = 0; i < buckets.length; i++) {
@@ -95,17 +102,25 @@ public class BucketSortHighScores implements HighScoreList {
             if(buckets[i] != null){
                 buckets[i].sortBucket();
             }
+            
         }
         
+        //System.out.println(Arrays.toString(buckets));
+        
         int index = 0;
-        for(int i = 0; i < buckets.length; i++){
+        for(int i = 0; i < buckets.length; i++) {
+            
             if(buckets[i] != null){
                 Bucket currentBucket = buckets[i];
+                
                 for(int j = 0; j < buckets[i].size(); j++){
                     players[index++] = currentBucket.players[j];
                 }
+                
             }
+            
         }
+        
     }
     
     private int size() {
@@ -115,46 +130,32 @@ public class BucketSortHighScores implements HighScoreList {
     private void increaseArraySize() {
         players = Arrays.copyOf(players, players.length + 1);
     }
-
+    
     @Override
     public List<Player> getHighScores(int numberOfHighScores) {
-        List<Player> results = new ArrayList<>();
-
-        for (int i = 0; i < numberOfHighScores; i++) {
-            
-            if (i > players.length) {
-                return results;
-            }
-           
-            if (players[i] == null) {
-                return results;
-            }
-
-            results.add(players[i]);
-        }
-        return results;
-    }
-
-    @Override
-    public List<Player> findPlayer(String firstName, String lastName) throws IllegalArgumentException {
         
-        if ((firstName == null || firstName.trim().isEmpty()) && (lastName == null || lastName.trim().isEmpty()))
-            throw new IllegalArgumentException("Either a valid first name or a last name has to be supplied");
-
         List<Player> result = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
-            String pFirstname = players[i].getFirstName();
-            String pLastname = players[i].getLastName();
+        for (int i = 0; i < numberOfHighScores && i < size(); i++) {
+            if (players[i] == null) return result;
 
-            if (pFirstname.startsWith(firstName) || pFirstname == firstName
-                    || pLastname.startsWith(lastName) || pLastname == lastName) {
-                result.add(players[i]);
-            }
+            result.add(players[i]);
         }
-
         return result;
     }
+
+
+    @Override
+    public List<Player> findPlayer(String firstName, String lastName) {
+        List<Player> matchedPlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (player.getFirstName().equals(firstName)) {
+                matchedPlayers.add(player);
+            }
+        }
+        return matchedPlayers;
+    }
+    
 }
 
 

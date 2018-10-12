@@ -26,7 +26,7 @@ public class HighScoreListTest {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
         highScores = new BucketSortHighScores();
-//        highScores = new SelectionSortHighScores();
+        //highScores = new SelectionSortHighScores();
 //        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
@@ -84,4 +84,20 @@ public class HighScoreListTest {
     private long getHighScore() {
         return randomizer.nextInt(MAX_HIGH_SCORE);
     }
+    
+    @Test
+    public void manyDifferentHighScores() {
+        
+        
+        for(int i=0; i < 10000; i++) {
+            
+            Player person = new Player("Person", "- " + i, getHighScore());
+            highScores.add(person);                
+            //System.out.print(person.getHighScore());
+         
+        }
+
+    }
+    
+    
 }

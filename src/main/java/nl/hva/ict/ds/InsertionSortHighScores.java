@@ -6,18 +6,19 @@
 package nl.hva.ict.ds;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  *
  * @author Simon
  */
-public class InsertionSortHighScores implements HighScoreList{
+public class InsertionSortHighScores implements HighScoreList {
     private List<Player> players = new ArrayList<>();
 
     @Override
     public void add(Player player) {
-
+        players.add(player);
     }
 
     @Override
@@ -26,7 +27,13 @@ public class InsertionSortHighScores implements HighScoreList{
     }
 
     @Override
-    public List<Player> findPlayer(String firstName, String lastName) throws IllegalArgumentException {
-        return null;
+    public List<Player> findPlayer(String firstName, String lastName) {
+        List<Player> matchedPlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (player.getFirstName().equals(firstName)) {
+                matchedPlayers.add(player);
+            }
+        }
+        return matchedPlayers;
     }
 }
