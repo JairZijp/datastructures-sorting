@@ -45,40 +45,6 @@ public class PriorityQueueHighScores implements HighScoreList{
         }
     }
     
-    public Player remove(){
-        if(playerList.size() == 0) return null;
-        
-        Player removedPlayer =  playerList.get(0);
-        playerList.set(0, playerList.get(playerList.size() - 1));
-        playerList.remove(playerList.size() - 1);
-        
-        int currentIndex = 0;
-        while(currentIndex < playerList.size()) {
-            int leftChildIndex = 2 * currentIndex + 1;
-            int rightChildIndex = 2 * currentIndex + 2;
-         
-            if(leftChildIndex >= playerList.size()) break;
-            
-            int maxIndex = leftChildIndex;
-            
-            if(rightChildIndex >= playerList.size()){
-                if(playerList.get(maxIndex).getHighScore() < playerList.get(rightChildIndex).getHighScore()){
-                    maxIndex = rightChildIndex;
-                }
-            }
-            
-            if(playerList.get(currentIndex).getHighScore() < playerList.get(maxIndex).getHighScore()){
-                Player tempPlayer = playerList.get(maxIndex);
-                playerList.set(maxIndex, playerList.get(currentIndex));
-                playerList.set(currentIndex, tempPlayer);
-            }
-            else{
-                break;
-            }
-            
-        }
-        return removedPlayer;   
-    }
     @Override
     public List<Player> getHighScores(int numberOfHighScores) {
         
