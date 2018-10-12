@@ -39,23 +39,26 @@ public class BucketSortHighScores implements HighScoreList {
 
         public void sortBucket() {
             
+            
             Player key;
             for (int i = 1; i < this.size(); i++) {     
 
                 key = players[i];
 
                 int index = i - 1;
-
+                
+                // TODO hier gaat het fout
                 while (index >= 0 && players[index].getHighScore() < key.getHighScore()) {
                     players[index+1] = players[index];
                     index--;
                 }
    
-                //System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
+                System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
                 
                 players[index + 1] = key;
             
-            }      
+            }    
+            
             
         }
 
