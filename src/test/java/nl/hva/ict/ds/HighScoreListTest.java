@@ -26,8 +26,8 @@ public class HighScoreListTest {
     public void setup() {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
-//        highScores = new BucketSortHighScores();
-        highScores = new SelectionSortHighScores();
+       highScores = new BucketSortHighScores();
+      //  highScores = new SelectionSortHighScores();
 //        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
@@ -75,7 +75,8 @@ public class HighScoreListTest {
         Player harry = new Player("Harry", "Potter", dumbledore.getHighScore() + 1);
         highScores.add(harry);
         
-        //System.out.print(dumbledore.getHighScore() + " || " + harry.getHighScore());
+        System.out.print("harryBeatsDumbledore: \n");
+        System.out.print(dumbledore.getHighScore() + " || " + harry.getHighScore());
 
         assertEquals(harry, highScores.getHighScores(1).get(0));
     }
@@ -109,14 +110,23 @@ public class HighScoreListTest {
         
         boolean lessThanPrevious = false;
         List<Player> sortedScoreBoard = highScores.getHighScores(10);
+        
+        System.out.print("\n highScoresAreSorted: \n");
+        
         for (int a = 1; a < totalPlayers; a++){
             long thiselementhighscore = sortedScoreBoard.get(a).getHighScore();
             long lastelementhighscore = sortedScoreBoard.get(a - 1).getHighScore();
             lessThanPrevious = ( thiselementhighscore < lastelementhighscore ) ;
             
+            System.out.print(sortedScoreBoard.get(a).getHighScore() + " - ");
+            
             if(!lessThanPrevious) break;
         }
         
+        
+        
         assertTrue("The scores are not sorted correctly!", lessThanPrevious);
+        
     }
+    
 }

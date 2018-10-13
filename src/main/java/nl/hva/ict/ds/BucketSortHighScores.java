@@ -34,7 +34,7 @@ public class BucketSortHighScores implements HighScoreList {
         }
         
         private void increaseArraySize() {
-            players = Arrays.copyOf(players, players.length+1);
+            players = Arrays.copyOf(players, players.length*2);
         }
 
         public void sortBucket() {
@@ -46,19 +46,18 @@ public class BucketSortHighScores implements HighScoreList {
                 key = players[i];
 
                 int index = i - 1;
-                
-                // TODO hier gaat het fout
+
                 while (index >= 0 && players[index].getHighScore() < key.getHighScore()) {
                     players[index+1] = players[index];
                     index--;
                 }
    
-                System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
+               // System.out.print(players[i].getHighScore() + " - " );
                 
                 players[index + 1] = key;
             
             }    
-            
+         
             
         }
 
@@ -91,8 +90,10 @@ public class BucketSortHighScores implements HighScoreList {
         for (int i = 0; i < count; i++) {
             Player currentPlayer = players[i];
 
-            int index = (int) currentPlayer.getHighScore() / 10000; 
+            int index = (int) currentPlayer.getHighScore() / 10000;
 
+             if (index < 0) index = 0;
+            
             if(buckets[index] == null) {
                 buckets[index] = new Bucket();
             }
@@ -111,7 +112,7 @@ public class BucketSortHighScores implements HighScoreList {
         //System.out.println(Arrays.toString(buckets));
         
         int index = 0;
-        for(int i = 0; i < buckets.length; i++) {
+        for (int i = buckets.length - 1; i >= 0; i--) {
             
             if(buckets[i] != null){
                 Bucket currentBucket = buckets[i];
@@ -131,7 +132,7 @@ public class BucketSortHighScores implements HighScoreList {
     }
 
     private void increaseArraySize() {
-        players = Arrays.copyOf(players, players.length + 1);
+        players = Arrays.copyOf(players, players.length*2);
     }
     
     @Override
