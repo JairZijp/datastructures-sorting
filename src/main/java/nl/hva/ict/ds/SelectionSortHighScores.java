@@ -59,6 +59,10 @@ public class SelectionSortHighScores implements HighScoreList {
         }
 
     }
+    
+    private int size() {
+        return count;
+    }
 
     private void increaseArraySize() {
         
