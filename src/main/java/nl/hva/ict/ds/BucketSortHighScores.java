@@ -43,7 +43,7 @@ public class BucketSortHighScores implements HighScoreList {
             
         }
         
-         public void addPlayer(Player player) {
+        public void addPlayerToBucket(Player player) {
 
             if (players.length <= size() ) {
                 increaseArraySize();
@@ -98,7 +98,7 @@ public class BucketSortHighScores implements HighScoreList {
                 buckets[index] = new Bucket();
             }
 
-            buckets[index].addPlayer(currentPlayer);
+            buckets[index].addPlayerToBucket(currentPlayer);
         }
 
         for(int i = 0; i < buckets.length; i++) {
