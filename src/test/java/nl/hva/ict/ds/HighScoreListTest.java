@@ -97,36 +97,93 @@ public class HighScoreListTest {
             //System.out.print(person.getHighScore());
          
         }
-   }
+    }
     
     @Test
-    public void highScoresAreSorted(){
-        int totalPlayers = 10;
+    public void selectionSortScoresAreSorted(){
+        // make highscores selectionsort
+        highScores = new SelectionSortHighScores();
         
-        for(int i = 0; i < totalPlayers; i++){
+        // tests if the scores are sorted correcty
+        boolean validResults = scoresAreSortedCorrectly();
+        assertTrue("The scores are not sorted on the selection-sort way!", validResults);
+    }
+    
+    @Test
+    public void bucketSortScoresAreSorted(){
+        // ake highscores bucketsort
+        highScores = new BucketSortHighScores();
+        
+        // tests if the scores are sorted correctly
+        boolean validResults = scoresAreSortedCorrectly();
+        assertTrue("The cores are not sorted on the bucket-sort way!", validResults);
+    }
+       
+    @Test
+    public void priorityQueueScoresAreSorted(){
+        // make highscores priorityqueue 
+        highScores = new PriorityQueueHighScores();
+        
+        int playersToTest = 10;
+        // the function returns a lit of players of size == playersToTest
+        List<Player> sortedScoreBoard = getTestHighScoreList(playersToTest);
+
+        // boolean to determine if the list is correctly sorted
+        boolean sortedCorrectly = false;
+        // loopp through players to test, the last element tested will be of index 1
+        while(playersToTest > 2){
+            // define the index of current element and the parent of the element
+            int currentIndex = playersToTest - 1;
+            int parentIndex = (currentIndex - 1 ) / 2;
+            
+            // get the highscores by index defined above, and check if the parent's score is higher
+            long currentElementScore = sortedScoreBoard.get(currentIndex).getHighScore();
+            long lastElementScore = sortedScoreBoard.get(parentIndex).getHighScore();
+            sortedCorrectly = (currentElementScore < lastElementScore);
+            
+            playersToTest--;
+            
+            // when it is not sorted correctly, stop the loop
+            if(!sortedCorrectly) break;
+        }
+        
+        assertTrue("The scores are not sorted on the priority-queue way!", sortedCorrectly);
+    }
+    
+    private boolean scoresAreSortedCorrectly(){
+        // test 10 players
+        int playersToTest = 10;        
+        // get highscores of 10 players and store them in sortedscoreboard
+        List<Player> sortedScoreBoard = getTestHighScoreList(playersToTest);
+        
+        // boolean to determine if the list is sorted incorrectly
+        boolean lessThanPrevious = false;
+        for (int a = 1; a < playersToTest; a++){
+            // loop through all players and get the current score and the parent score
+            long currentElementScore = sortedScoreBoard.get(a).getHighScore();
+            long lastElementScore = sortedScoreBoard.get(a - 1).getHighScore();
+            // is false when the score of the previous element iss lower than the current score
+            lessThanPrevious = ( currentElementScore < lastElementScore ) ;
+            
+            // loop breaks if list is not sorted correctly
+            if(!lessThanPrevious) break;
+        }
+        
+        // return the result of the loop
+        return lessThanPrevious;        
+    }
+    
+    private List<Player> getTestHighScoreList(int size){
+        // iterate a certain amount of times
+        for(int i = 0; i < size; i++){
+            
+            // for eah iteration, add a new player to the scoreboard
             Player person = new Player("Person", "-" + i, getHighScore());
             highScores.add(person);
         }
         
-        boolean lessThanPrevious = false;
-        List<Player> sortedScoreBoard = highScores.getHighScores(10);
-        
-        System.out.print("\n highScoresAreSorted: \n");
-        
-        for (int a = 1; a < totalPlayers; a++){
-            long thiselementhighscore = sortedScoreBoard.get(a).getHighScore();
-            long lastelementhighscore = sortedScoreBoard.get(a - 1).getHighScore();
-            lessThanPrevious = ( thiselementhighscore < lastelementhighscore ) ;
-            
-            System.out.print(sortedScoreBoard.get(a).getHighScore() + " - ");
-            
-            if(!lessThanPrevious) break;
-        }
-        
-        
-        
-        assertTrue("The scores are not sorted correctly!", lessThanPrevious);
-        
+        // return the list of players with the given size
+        return highScores.getHighScores(size);
     }
     
 }

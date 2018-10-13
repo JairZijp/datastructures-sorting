@@ -7,8 +7,6 @@ package nl.hva.ict.ds;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 /**
  *
@@ -29,10 +27,15 @@ public class PriorityQueueHighScores implements HighScoreList{
     public void add(Player newPlayer){
         playerList.add(newPlayer);
         
+        // when the first player is added, currentindex will be 0
         int currentIndex = playerList.size() - 1;
-        
+  
+        // the while loop will only be entered when there are 2 elements or more
         while( currentIndex > 0 ){
             int parentIndex = ( currentIndex - 1 ) / 2;
+            long currentscore = playerList.get(currentIndex).getHighScore();
+            long parentscore = playerList.get(parentIndex).getHighScore();
+            boolean aaa = currentscore > parentscore;
             if(playerList.get(currentIndex).getHighScore() > playerList.get(parentIndex).getHighScore()){
                 Player temp = playerList.get(currentIndex);
                 playerList.set(currentIndex, playerList.get(parentIndex));
