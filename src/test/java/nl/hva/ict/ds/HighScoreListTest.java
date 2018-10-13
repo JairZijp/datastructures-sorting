@@ -26,9 +26,9 @@ public class HighScoreListTest {
     public void setup() {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
-//        highScores = new BucketSortHighScores();
-//        highScores = new SelectionSortHighScores();
-        highScores = new PriorityQueueHighScores();
+       highScores = new BucketSortHighScores();
+      //  highScores = new SelectionSortHighScores();
+//        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
         dumbledore = new Player("Albus", "Dumbledore", nearlyHeadlessNick.getHighScore() * 1000);
@@ -75,7 +75,8 @@ public class HighScoreListTest {
         Player harry = new Player("Harry", "Potter", dumbledore.getHighScore() + 1);
         highScores.add(harry);
         
-        //System.out.print(dumbledore.getHighScore() + " || " + harry.getHighScore());
+        System.out.print("harryBeatsDumbledore: \n");
+        System.out.print(dumbledore.getHighScore() + " || " + harry.getHighScore());
 
         assertEquals(harry, highScores.getHighScores(1).get(0));
     }
@@ -184,4 +185,5 @@ public class HighScoreListTest {
         // return the list of players with the given size
         return highScores.getHighScores(size);
     }
+    
 }

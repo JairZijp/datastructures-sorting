@@ -14,19 +14,41 @@ import java.util.List;
  * @author Simon
  */
 public class BucketSortHighScores implements HighScoreList {
-    Player[] players = new Player[100];
-    int count = 0;
     
     class Bucket {
 
-        Player[] players = new Player[100];
+        Player[] players = new Player[1];
         int count;
 
-        public void addPlayer(Player player) {
+        public void sortElements() {   
+            
+            Player player;
+            
+            for (int i = 1; i < this.size(); i++) {     
 
-            if (count >= players.length) {
+                player = players[i];
+
+                int index = i - 1;
+
+                while (index >= 0 && players[index].getHighScore() < player.getHighScore()) {
+                    players[index+1] = players[index];
+                    index--;
+                }
+   
+               // System.out.print(players[i].getHighScore() + " - " );
+                
+                players[index + 1] = player;
+            
+            }         
+            
+        }
+        
+         public void addPlayer(Player player) {
+
+            if (players.length <= size() ) {
                 increaseArraySize();
             }
+            
             players[count] = player;
 
             count++;
@@ -37,38 +59,19 @@ public class BucketSortHighScores implements HighScoreList {
             players = Arrays.copyOf(players, players.length+1);
         }
 
-        public void sortBucket() {
-            
-            Player key;
-            for (int i = 1; i < this.size(); i++) {     
-
-                key = players[i];
-
-                int index = i - 1;
-
-                while (index >= 0 && players[index].getHighScore() < key.getHighScore()) {
-                    players[index+1] = players[index];
-                    index--;
-                }
-   
-                //System.out.println(players[i].getFirstName() + " - " + players[i].getHighScore());
-                
-                players[index + 1] = key;
-            
-            }      
-            
-        }
-
         public int size(){
             return count;
         }
         
     }
     
+    Player[] players = new Player[1];
+    int count = 0;
+    
     @Override
     public void add(Player player) {
         
-        if (count >= players.length) {
+        if ( players.length >= size() ) {
             increaseArraySize();
         }
 
@@ -78,17 +81,18 @@ public class BucketSortHighScores implements HighScoreList {
         
         //System.out.println("Score: " + player.getHighScore());
 
-        bucketSort();
+        sortElementsInBuckets();
     }
 
-    public void bucketSort() {
+    public void sortElementsInBuckets() {
 
         Bucket[] buckets = new Bucket[100];
 
         for (int i = 0; i < count; i++) {
+            
             Player currentPlayer = players[i];
 
-            int index = (int) currentPlayer.getHighScore() / 10000; 
+            int index = (int) currentPlayer.getHighScore() / 10000;
 
             if(buckets[index] == null) {
                 buckets[index] = new Bucket();
@@ -100,7 +104,7 @@ public class BucketSortHighScores implements HighScoreList {
         for(int i = 0; i < buckets.length; i++) {
 
             if(buckets[i] != null){
-                buckets[i].sortBucket();
+                buckets[i].sortElements();
             }
             
         }
@@ -108,13 +112,14 @@ public class BucketSortHighScores implements HighScoreList {
         //System.out.println(Arrays.toString(buckets));
         
         int index = 0;
-        for(int i = 0; i < buckets.length; i++) {
+        
+        for (int i = buckets.length - 1; i >= 0; i--) {
             
             if(buckets[i] != null){
                 Bucket currentBucket = buckets[i];
                 
-                for(int j = 0; j < buckets[i].size(); j++){
-                    players[index++] = currentBucket.players[j];
+                for(int a = 0; a < buckets[i].size(); a++){
+                    players[index++] = currentBucket.players[a];
                 }
                 
             }
