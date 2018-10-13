@@ -27,8 +27,8 @@ public class HighScoreListTest {
         // Here you should select your implementation to be tested.
 //        highScores = new DummyHighScores();
 //        highScores = new BucketSortHighScores();
-        highScores = new SelectionSortHighScores();
-//        highScores = new PriorityQueueHighScores();
+//        highScores = new SelectionSortHighScores();
+        highScores = new PriorityQueueHighScores();
 
         nearlyHeadlessNick = new Player("Nicholas", "de Mimsy-Porpington", getHighScore() % 200);
         dumbledore = new Player("Albus", "Dumbledore", nearlyHeadlessNick.getHighScore() * 1000);
@@ -96,27 +96,72 @@ public class HighScoreListTest {
             //System.out.print(person.getHighScore());
          
         }
-   }
+    }
     
     @Test
-    public void highScoresAreSorted(){
-        int totalPlayers = 10;
+    public void selectionSortScoresAreSorted(){
+        highScores = new SelectionSortHighScores();
         
-        for(int i = 0; i < totalPlayers; i++){
-            Player person = new Player("Person", "-" + i, getHighScore());
-            highScores.add(person);
+        boolean validResults = scoresAreSortedCorrectly();
+        assertTrue("The scores are not sorted on the selection-sort way!", validResults);
+    }
+    
+    @Test
+    public void bucketSortScoresAreSorted(){
+        highScores = new BucketSortHighScores();
+        
+        boolean validResults = scoresAreSortedCorrectly();
+        assertTrue("The cores are not sorted on the bucket-sort way!", validResults);
+    }
+       
+    @Test
+    public void priorityQueueScoresAreSorted(){
+        highScores = new PriorityQueueHighScores();
+        
+        int playersToTest = 10;
+        List<Player> sortedScoreBoard = getTestHighScoreList(playersToTest);
+
+        boolean sortedCorrectly = false;
+        while(playersToTest > 2){
+            int currentIndex = playersToTest - 1;
+            int parentIndex = (currentIndex - 1 ) / 2;
+            
+            long currentElementScore = sortedScoreBoard.get(currentIndex).getHighScore();
+            long lastElementScore = sortedScoreBoard.get(parentIndex).getHighScore();
+            sortedCorrectly = (currentElementScore < lastElementScore);
+            
+            playersToTest--;
+            
+            if(!sortedCorrectly) break;
         }
         
+        assertTrue("The scores are not sorted on the priority-queue way!", sortedCorrectly);
+    }
+    
+    private boolean scoresAreSortedCorrectly(){
+        highScores = new SelectionSortHighScores();
+        
+        int playersToTest = 10;        
+        List<Player> sortedScoreBoard = getTestHighScoreList(playersToTest);
+        
         boolean lessThanPrevious = false;
-        List<Player> sortedScoreBoard = highScores.getHighScores(10);
-        for (int a = 1; a < totalPlayers; a++){
-            long thiselementhighscore = sortedScoreBoard.get(a).getHighScore();
-            long lastelementhighscore = sortedScoreBoard.get(a - 1).getHighScore();
-            lessThanPrevious = ( thiselementhighscore < lastelementhighscore ) ;
+        for (int a = 1; a < playersToTest; a++){
+            long currentElementScore = sortedScoreBoard.get(a).getHighScore();
+            long lastElementScore = sortedScoreBoard.get(a - 1).getHighScore();
+            lessThanPrevious = ( currentElementScore < lastElementScore ) ;
             
             if(!lessThanPrevious) break;
         }
         
-        assertTrue("The scores are not sorted correctly!", lessThanPrevious);
+        return lessThanPrevious;        
+    }
+    
+    private List<Player> getTestHighScoreList(int size){
+        for(int i = 0; i < size; i++){
+            Player person = new Player("Person", "-" + i, getHighScore());
+            highScores.add(person);
+        }
+        
+        return highScores.getHighScores(10);
     }
 }
